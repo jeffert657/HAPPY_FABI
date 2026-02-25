@@ -555,10 +555,13 @@
 <body>
     <div class="container">
         <!-- TÍTULO PRINCIPAL -->
-        <!-- AUDIO AUTOMÁTICO -->
-        <audio autoplay loop style="display: none;">
+        <!-- AUDIO: Chrome bloquea autoplay con sonido; control manual -->
+        <audio id="musica" loop style="display: none;">
             <source src="musica.mpeg" type="audio/mpeg">
         </audio>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <button id="playBtn" class="boton boton-principal" onclick="toggleMusic()">▶️ Tocar música</button>
+        </div>
 
         <div class="titulo-principal">
             <h1 class="titulo-3d">✨ ¡FELIZ CUMPLEAÑOS FABI! ✨</h1>
@@ -666,6 +669,24 @@
         // FUNCIÓN DESPLAZARSE A FOTOS
         function desplazarAFotos() {
             document.querySelector('.galeria-titulo').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // CONTROL DE AUDIO (reproducción manual para Chrome)
+        function toggleMusic() {
+            const audio = document.getElementById('musica');
+            const btn = document.getElementById('playBtn');
+            if (!audio) return;
+            if (audio.paused) {
+                audio.play().then(() => {
+                    if (btn) btn.textContent = '⏸️ Pausar música';
+                }).catch(err => {
+                    console.error('No se puede reproducir:', err);
+                    if (btn) btn.textContent = '🔊 Reproducir (clic requerido)';
+                });
+            } else {
+                audio.pause();
+                if (btn) btn.textContent = '▶️ Tocar música';
+            }
         }
     </script>
 </body>
